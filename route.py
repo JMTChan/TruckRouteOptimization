@@ -36,42 +36,9 @@ st.markdown(
 # ---- UPLOAD DATA ----
 upload_option = st.radio("Upload Method", ["Excel File", "Google Sheet URL"])
 if upload_option == "Excel File":
-    st.title("Select Excel Sheet")
     excel_file = st.file_uploader("Upload Excel File (.xlsx)", type=["xlsx"])
     if excel_file:
-    # Get the list of sheet names in the uploaded Excel file
-    xls = pd.ExcelFile(excel_file)
-    sheet_names = xls.sheet_names
-
-    if sheet_names:
-        selected_sheet = st.selectbox("Select a sheet:", sheet_names)
-
-        if selected_sheet:
-            try:
-                df = pd.read_excel(excel_file, sheet_name=selected_sheet)
-                st.subheader(f"Data from Sheet: {selected_sheet}")
-                st.dataframe(df)
-
-                # Now you can proceed with the rest of your data processing
-                # using the 'df' DataFrame.
-                required_cols = {"Trade Name", "Map Coordinates", "AVERAGE PER PURCHASE"}
-                if required_cols.issubset(set(df.columns)):
-                    try:
-                        df[['lat', 'lng']] = df['Map Coordinates'].str.split(",", expand=True).astype(float)
-                        df['sales'] = df['AVERAGE PER PURCHASE']
-                        # Use 'Trade Name' as the key for the location name
-                        st.session_state.locations = df[['Trade Name', 'lat', 'lng', 'sales']].rename(columns={'Trade Name': 'name'}).to_dict(orient="records")
-                        st.success(f"✅ Data from '{selected_sheet}' loaded and parsed.")
-                        st.dataframe(df[['Trade Name', 'lat', 'lng', 'sales']])
-                    except Exception as e:
-                        st.error(f"❌ Error parsing coordinates in '{selected_sheet}': {e}")
-                else:
-                    st.error(f"❌ Missing columns in '{selected_sheet}'. Required: {', '.join(required_cols)}")
-
-            except Exception as e:
-                st.error(f"❌ Error reading sheet '{selected_sheet}': {e}")
-    else:
-        st.warning("⚠️ The uploaded Excel file contains no sheets.")
+        df = pd.read_excel(excel_file)
 elif upload_option == "Google Sheet URL":
     sheet_url = st.text_input("Paste your Google Sheets URL")
     if sheet_url and "docs.google.com" in sheet_url:
