@@ -8,7 +8,7 @@ from streamlit_folium import folium_static
 
 # Google Maps API Key
 st.set_page_config(page_title="Truck Route Optimizer (Hybrid)", layout="wide")
-GOOGLE_MAPS_API_KEY = ""  # <-- Replace with your Google Maps API Key
+GOOGLE_MAPS_API_KEY = "AIzaSyDdFX6XIg37LJin2A9JwQKLjpMHmPtwTiY"  # <-- Replace with your Google Maps API Key
 
 # Warehouse coordinates
 warehouse = {'name': 'Warehouse', 'lat': 6.189746, 'lng': 125.089500}
